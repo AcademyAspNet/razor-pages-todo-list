@@ -1,0 +1,28 @@
+﻿@page
+@model IndexModel
+
+@inject ITaskService taskService
+
+<div class="container-fluid border-bottom border-primary mb-3">
+    <p class="fs-4">Список задач</p>
+</div>
+
+@foreach (UserTask task in taskService.GetTasks())
+{
+    <div class="card mb-3">
+        <div class="card-header">
+            <span>@task.Title</span>
+        </div>
+        <div class="card-body">
+            <p class="card-text">
+                @(task.Description ?? "Описание отсутствует...")
+            </p>
+        </div>
+        <div class="card-footer">
+            <span>
+                <i class="bi bi-clock me-1"></i>
+                @task.CreatedAt
+            </span>
+        </div>
+    </div>
+}

@@ -1,0 +1,25 @@
+﻿@page
+@model ToDoList.Pages.CreateTaskModel
+
+<div class="container-fluid border-bottom border-primary mb-3">
+    <p class="fs-4">Новая задача</p>
+</div>
+
+<form method="POST">
+    <div class="mb-3">
+        <label class="form-label" asp-for="Title">Заголовок задачи</label>
+        <input class="form-control" asp-for="Title" />
+        <span class="text-danger" asp-validation-for="Title"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Description">Описание задачи</label>
+        <textarea class="form-control" asp-for="Description" rows="3"></textarea>
+        <span class="text-danger" asp-validation-for="Description"></span>
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" type="submit">
+            <i class="bi bi-plus-circle me-2"></i>
+            Создать
+        </button>
+    </div>
+</form>
