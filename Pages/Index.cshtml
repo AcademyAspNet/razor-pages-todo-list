@@ -1,7 +1,15 @@
 ﻿@page
+@using ToDoList.Models.Entities
 @model IndexModel
 
 @inject ITaskService taskService
+
+@if (Model.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        <span>@Model.ErrorMessage</span>
+    </div>
+}
 
 <div class="container-fluid border-bottom border-primary mb-3">
     <p class="fs-4">Список задач</p>
@@ -9,19 +17,59 @@
 
 @foreach (UserTask task in taskService.GetTasks())
 {
+    string circleStatusClass = task.IsDone ? "text-success" : "text-danger";
+
     <div class="card mb-3">
-        <div class="card-header">
-            <span>@task.Title</span>
+        <div class="card-header d-flex align-items-center">
+            <div class="container-fluid">
+                <i class="bi bi-circle-fill me-2 @circleStatusClass"></i>
+                <span class="fw-bold">@task.Title</span>
+            </div>
+            <div class="container-fluid p-0 d-flex flex-row-reverse gap-2">
+                <a class="btn btn-danger" asp-page="/EditTask" asp-page-handler="DeleteTask" asp-route-id="@task.Id">
+                    <i class="bi bi-trash me-1"></i>
+                    Удалить
+                </a>
+                <a class="btn btn-primary" asp-page="/EditTask" asp-route-id="@task.Id">
+                    <i class="bi bi-pencil me-1"></i>
+                    Редактировать
+                </a>
+                @if (task.IsDone)
+                {
+                    <a class="btn btn-danger" asp-page="/EditTask" asp-page-handler="ChangeTaskStatus" asp-route-id="@task.Id">
+                        <i class="bi bi-dash-circle me-1"></i>
+                        Снять отметку
+                    </a>
+                }
+                else
+                {
+                    <a class="btn btn-success" asp-page="/EditTask" asp-page-handler="ChangeTaskStatus" asp-route-id="@task.Id">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Отметить
+                    </a>
+                }
+            </div>
         </div>
         <div class="card-body">
             <p class="card-text">
-                @(task.Description ?? "Описание отсутствует...")
+                @if (task.Description != null)
+                {
+                    <text>@task.Description</text>
+                }
+                else
+                {
+                    <i class="text-secondary">Описание отсутствует...</i>
+                }
             </p>
         </div>
         <div class="card-footer">
             <span>
-                <i class="bi bi-clock me-1"></i>
-                @task.CreatedAt
+                <i class="bi bi-calendar-week me-1"></i>
+                @task.CreatedAt.ToShortDateString()
+                <i class="bi bi-clock ms-2 me-1"></i>
+                @task.CreatedAt.ToShortTimeString()
+                <i class="bi bi-check2-square ms-2 me-1"></i>
+                @(task.IsDone ? "Выполнена" : "Не выполнена")
             </span>
         </div>
     </div>

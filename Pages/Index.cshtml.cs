@@ -5,9 +5,7 @@ namespace ToDoList.Pages
 {
     public class IndexModel : PageModel
     {
-        public void OnGet()
-        {
-
-        }
+        [BindProperty(Name = "error", SupportsGet = true)]
+        public string? ErrorMessage { get; set; }
     }
 }
