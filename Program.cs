@@ -1,3 +1,5 @@
+using ToDoList.Repositories;
+using ToDoList.Repositories.Implementations;
 using ToDoList.Services;
 using ToDoList.Services.Implementations;
 
@@ -12,7 +14,8 @@ namespace ToDoList
             // Add services to the container.
             builder.Services.AddRazorPages();
 
-            builder.Services.AddSingleton<ITaskService, TaskService>();
+            builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+            builder.Services.AddScoped<ITaskService, TaskService>();
 
             var app = builder.Build();
 

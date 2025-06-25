@@ -1,86 +1,79 @@
 ﻿using ToDoList.Exceptions;
 using ToDoList.Models.Entities;
+using ToDoList.Repositories;
 
 namespace ToDoList.Services.Implementations
 {
     public class TaskService : ITaskService
     {
-        private readonly List<UserTask> _tasks;
-        private long _nextTaskId;
+        private readonly ITaskRepository _taskRepository;
 
-        public TaskService()
+        public TaskService(ITaskRepository taskRepository)
         {
-            _tasks = new List<UserTask>();
-            _nextTaskId = 0;
+            _taskRepository = taskRepository;
         }
 
         public List<UserTask> GetTasks()
         {
-            return _tasks;
+            return _taskRepository.GetAll();
         }
 
         public void CreateTask(string title, string? description)
         {
             UserTask task = new UserTask()
             {
-                Id = _nextTaskId++,
                 Title = title,
                 Description = description
             };
 
-            _tasks.Add(task);
+            _taskRepository.Add(task);
+        }
+
+        public void UpdateTask(long id, string title, string? description, bool isDone, DateTime createdAt)
+        {
+            UserTask? task = _taskRepository.GetById(id);
+
+            if (task == null)
+                throw new TaskNotFoundException(id);
+
+            task.Title = title;
+            task.Description = description;
+            task.IsDone = isDone;
+            task.CreatedAt = createdAt;
+
+            _taskRepository.SaveChanges();
         }
 
         public UserTask? GetTaskById(long id)
         {
-            foreach (UserTask task in _tasks)
-            {
-                if (task.Id == id)
-                    return task;
-            }
-
-            return null;
+            return _taskRepository.GetById(id);
         }
 
         public void ChangeTaskStatus(long id, bool isDone)
         {
-            UserTask? task = GetTaskById(id);
+            UserTask? task = _taskRepository.GetById(id);
 
             if (task == null)
                 throw new TaskNotFoundException(id);
 
             task.IsDone = isDone;
+            _taskRepository.SaveChanges();
         }
 
         public void ChangeTaskStatus(long id)
         {
-            UserTask? task = GetTaskById(id);
+            UserTask? task = _taskRepository.GetById(id);
 
             if (task == null)
                 throw new TaskNotFoundException(id);
 
             task.IsDone = !task.IsDone;
+            _taskRepository.SaveChanges();
         }
 
         public void DeleteTask(long id)
         {
-            UserTask? task;
-
-            for (int i = 0; i < _tasks.Count; i++)
-            {
-                task = _tasks[i];
-
-                if (task == null)
-                    continue;
-
-                if (task.Id == id)
-                {
-                    _tasks.RemoveAt(i);
-                    return;
-                }
-            }
-
-            throw new TaskNotFoundException(id);
+            _taskRepository.Delete(id);
         }
     }
 }

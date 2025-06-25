@@ -2,7 +2,7 @@
 {
     public class UserTask
     {
-        public required long Id { get; set; }
+        public long Id { get; set; }
         public required string Title { get; set; }
         public string? Description { get; set; }
         public bool IsDone { get; set; } = false;

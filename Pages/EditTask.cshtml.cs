@@ -104,15 +104,7 @@ namespace ToDoList.Pages
             if (TaskId == null)
                 return RedirectToHome($"Не указан идентификатор задачи.");
 
-            UserTask? task = _taskService.GetTaskById((long) TaskId);
-
-            if (task == null)
-                return RedirectToHome($"Задачи с идентификатором {TaskId} не существует.");
-
-            task.Title = Title;
-            task.Description = Description;
-            task.IsDone = IsDone;
-            task.CreatedAt = CreatedAt;
+            _taskService.UpdateTask((long) TaskId, Title, Description, IsDone, CreatedAt);
 
             return RedirectToHome();
         }
