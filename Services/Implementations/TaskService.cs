@@ -6,9 +6,9 @@ namespace ToDoList.Services.Implementations
 {
     public class TaskService : ITaskService
     {
-        private readonly ITaskRepository _taskRepository;
+        private readonly IRepository<UserTask> _taskRepository;
 
-        public TaskService(ITaskRepository taskRepository)
+        public TaskService(IRepository<UserTask> taskRepository)
         {
             _taskRepository = taskRepository;
         }

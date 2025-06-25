@@ -2,11 +2,11 @@
 
 namespace ToDoList.Repositories
 {
-    public interface ITaskRepository
+    public interface IRepository<T> where T : Entity
     {
-        List<UserTask> GetAll();
-        UserTask? GetById(long id);
-        void Add(UserTask task);
+        List<T> GetAll();
+        T? GetById(long id);
+        void Add(T task);
         void Delete(long id);
         void SaveChanges();
     }

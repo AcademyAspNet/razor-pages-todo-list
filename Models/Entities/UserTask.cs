@@ -1,8 +1,7 @@
 ﻿namespace ToDoList.Models.Entities
 {
-    public class UserTask
+    public class UserTask : Entity
     {
-        public long Id { get; set; }
         public required string Title { get; set; }
         public string? Description { get; set; }
         public bool IsDone { get; set; } = false;
